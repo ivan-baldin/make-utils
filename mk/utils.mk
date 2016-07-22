@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifndef utils.mk
+utils.mk :=
+
 # Ensure default goal is defined
 ifndef .DEFAULT_GOAL
 .PHONY: all
@@ -69,3 +72,5 @@ $(call set-program,RM,rm -f)
 $(call set-program,RM-R,rm -fr)
 $(call set-program,MKDIR,mkdir -p)
 $(call set-program,MAKE,make)
+
+endif

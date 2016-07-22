@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifndef gcc.mk
+gcc.mk :=
+
 MK_DIR ?= $(dir $(lastword $(MAKEFILE_LIST)))
 
 include $(MK_DIR)utils.mk
@@ -42,3 +45,5 @@ $(call gcc-set, READELF,   readelf)
 $(call gcc-set, SIZE,      size)
 $(call gcc-set, STRINGS,   strings)
 $(call gcc-set, STRIP,     strip)
+
+endif

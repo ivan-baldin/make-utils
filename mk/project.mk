@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifndef project.mk
+project.mk :=
+
 ifndef SOURCE_DIR
   SOURCE_DIR := $(dir $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST)))))
 endif
@@ -98,3 +101,5 @@ $(call vpath-add-list,$(VPATH_SUFFIXES),$(SOURCE_DIR))
 $(call subdir-add,.)
 
 $(.DEFAULT_GOAL): $(TARGETS)
+
+endif
