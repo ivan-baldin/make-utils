@@ -1,11 +1,11 @@
 # Copyright 2016 Ivan Baldin
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,6 +24,10 @@ $(VERBOSE).SILENT:
 
 # Enable second expansion of rules
 .SECONDEXPANSION:
+
+################################################################################
+# Variables
+################################################################################
 
 # Suffixes that should be included in vpath
 VPATH_SUFFIXES := .c .cc .C .cpp .cxx .h .hpp .s .S .y .l .sh
@@ -55,16 +59,6 @@ endef
 define rule-pretty-print
 @printf '%-8s%s\n' '$1' '$@'
 	$2
-endef
-
-##
-# Make directory creation rules.
-#
-# @param 1 List of targets.
-#
-define mkdir-rules
-$(foreach d,$(filter-out ./,$(sort $(dir $1))),$(eval $d: ; $$(MKDIR) $$@))
-$(foreach t,$1,$(and $(filter-out ./,$(dir $t)),$(eval $t: | $(dir $t))))
 endef
 
 ################################################################################
