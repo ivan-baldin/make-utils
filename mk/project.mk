@@ -38,7 +38,7 @@ source_dir = $(SOURCE_DIR)$(output_dir)
 #
 # @param 1 Subdirectory to add. Must be relative to SOURCE_DIR.
 #
-subdir-add = $(eval $(call subdir-add-body,$1,$(output_dir),$(objects),$(targets)))
+subdir-add = $(eval $(call subdir-add-body,$1,$(output_dir),$(objects)))
 define subdir-add-body
   $(eval output_dir := $(call source-strip,$(SOURCE_DIR)$1))
   $(eval output_dir := $(and $(output_dir),$(output_dir)/))
@@ -54,25 +54,15 @@ define subdir-add-body
       OBJECTS += $$($(output_dir)OBJECTS)
     endif
   endif
-  ifneq ($$(words $$(targets)),0)
-    ifeq ($(output_dir),)
-      $$(eval TARGETS += $$(targets))
-    else
-      $(output_dir)TARGETS := $$(addprefix $(output_dir),$$(targets))
-      TARGETS += $$($(output_dir)TARGETS)
-    endif
-  endif
 
 # Create output directory rules
 $$($(output_dir)OBJECTS): | $(output_dir)
-$$($(output_dir)TARGETS): | $(output_dir)
 $(output_dir):
 	$$(MKDIR) $$@
 
   # Restore local variables
   output_dir := $2
   objects := $3
-  targets := $4
 endef
 
 ##
@@ -99,7 +89,5 @@ source-strip = $(foreach f,$1,$(call prefix-strip,$(SOURCE_DIR),$f))
 $(call vpath-add-list,$(VPATH_SUFFIXES),$(SOURCE_DIR))
 
 $(call subdir-add,.)
-
-$(.DEFAULT_GOAL): $(TARGETS)
 
 endif

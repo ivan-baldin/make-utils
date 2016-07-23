@@ -22,10 +22,10 @@ ARFLAGS := rcsU
 # Rules
 ################################################################################
 
+$(.DEFAULT_GOAL): example
+
 $(call subdir-add,src)
 $(call subdir-add,lib)
-
-targets += example liblib.a
 
 liblib.a: liblib.a($(lib/OBJECTS))
 
