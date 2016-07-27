@@ -23,7 +23,7 @@ include $(MK_DIR)utils.mk
 # Programs
 ################################################################################
 
-gcc-set = $(call set-program,$(strip $1),$(strip $(GCC_PREFIX)$2))
+gcc-set = $(call set-program,$(strip $1),$(GCC_PREFIX)$(strip $2))
 
 $(call gcc-set, ADDR2LINE, addr2line)
 $(call gcc-set, AR,        ar)

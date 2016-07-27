@@ -35,6 +35,9 @@ $(VERBOSE).SILENT:
 # Suffixes that should be included in vpath
 VPATH_SUFFIXES := .c .cc .C .cpp .cxx .h .hpp .s .S .y .l .sh
 
+# Pretty print format for programs
+PROGRAM_PP_FMT := '%-8s%s\n'
+
 ################################################################################
 # Functions
 ################################################################################
@@ -60,7 +63,7 @@ $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)): $1 = $$(call rule-pretty-print,$1,$2)
 endef
 
 define rule-pretty-print
-@printf '%-8s%s\n' '$1' '$@'
+@printf $(PROGRAM_PP_FMT) '$1' '$@'
 	$2
 endef
 
