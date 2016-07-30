@@ -1,1 +1,1 @@
-objects += main.o
+targets := main.o

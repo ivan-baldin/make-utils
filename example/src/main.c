@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "lib.h"
+#include "foo.h"
 
 int main(void) {
     printf("%s:%s called\n", __FILE__, __func__);
-    lib();
+    foo();
 }

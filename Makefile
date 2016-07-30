@@ -37,7 +37,7 @@ release: CXXFLAGS = -O2
 .PHONY: debug release
 debug release:
 	@mkdir -p $(OUTPUT_DIR)$@
-	$(MAKE) -C $(OUTPUT_DIR)$@ -f $(SOURCE_DIR)../mk/project.mk
+	$(MAKE) -C $(OUTPUT_DIR)$@ -f $(SOURCE_DIR)../project.mk
 
 .PHONY: clean
 clean:

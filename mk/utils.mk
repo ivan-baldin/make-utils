@@ -28,6 +28,11 @@ $(VERBOSE).SILENT:
 # Enable second expansion of rules
 .SECONDEXPANSION:
 
+# If unset set default source directory to ".."
+ifndef SOURCE_DIR
+  SOURCE_DIR := $(dir $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST)))))
+endif
+
 ################################################################################
 # Variables
 ################################################################################
@@ -37,6 +42,17 @@ VPATH_SUFFIXES := .c .cc .C .cpp .cxx .h .hpp .s .S .y .l .sh
 
 # Pretty print format for programs
 PROGRAM_PP_FMT := '%-8s%s\n'
+
+SUBDIR_FILE ?= dir.mk
+
+output_dir = ./
+source_dir = $(SOURCE_DIR)$(output_dir)
+
+@/TARGETS = $(addprefix $(output_dir),$(targets))
+@/OBJECTS = $(addprefix $(output_dir),$(objects))
+TARGETS =
+OBJECTS =
+DEPENDS = $(patsubst %.o,%.d,$(filter %.o,$(TARGETS) $(OBJECTS)))
 
 ################################################################################
 # Functions
@@ -65,6 +81,41 @@ endef
 define rule-pretty-print
 @printf $(PROGRAM_PP_FMT) '$1' '$@'
 	$2
+endef
+
+##
+# Add subdirectory to the project.
+#
+# @param 1 Subdirectory to add. Must be relative to SOURCE_DIR.
+#
+add-subdir = $(eval $(call add-subdir-body,$1,$(output_dir),$(targets),$(objects)))
+define add-subdir-body
+  $(eval output_dir := $(1:%/=%)/)
+  targets :=
+  objects :=
+
+  # Create output directory
+  $(shell $(MKDIR) $(output_dir))
+
+  # Process subdirectory file
+  include $(SOURCE_DIR)$(output_dir)$(SUBDIR_FILE)
+
+  # Add exported targets
+  $(output_dir)TARGETS := $$(@/TARGETS)
+  ifneq ($$(@/TARGETS),)
+    TARGETS += $$($(output_dir)TARGETS)
+  endif
+
+  # Add compiled objects
+  $(output_dir)OBJECTS := $$(@/OBJECTS)
+  ifneq ($$(@/OBJECTS),)
+    OBJECTS += $$($(output_dir)OBJECTS)
+  endif
+
+  # Restore local variables
+  $(output_dir) := $2
+  targets := $3
+  objects := $4
 endef
 
 ################################################################################

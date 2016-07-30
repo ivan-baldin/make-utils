@@ -1,3 +1,6 @@
+SOURCE_DIR := $(dir $(MAKEFILE_LIST))
+
+include $(SOURCE_DIR)mk/utils.mk
 include $(SOURCE_DIR)mk/gcc.mk
 
 ################################################################################
@@ -18,19 +21,18 @@ CXXFLAGS += -MMD
 # Archive Flags
 ARFLAGS := rcsU
 
+$(call vpath-add-list,$(VPATH_SUFFIXES),$(SOURCE_DIR))
+
 ################################################################################
 # Rules
 ################################################################################
 
 $(.DEFAULT_GOAL): example
 
-$(call subdir-add,src)
-$(call subdir-add,lib)
+$(call add-subdir,src)
+$(call add-subdir,lib)
 
-liblib.a: liblib.a($(lib/OBJECTS))
-
-example: LDLIBS += liblib.a
-example: $(src/OBJECTS) | liblib.a
+example: $(src/TARGETS) $(lib/TARGETS)
 	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
--include $(ALL_OBJECTS:.o=.d)
+-include $(DEPENDS)
