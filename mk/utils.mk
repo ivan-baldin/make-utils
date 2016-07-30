@@ -38,7 +38,9 @@ endif
 ################################################################################
 
 # Suffixes that should be included in vpath
-VPATH_SUFFIXES := .c .cc .C .cpp .cxx .h .hpp .s .S .y .l .sh
+C_SUFFIXES   := .c .h
+CXX_SUFFIXES := .cc .C .cpp .cxx .hpp
+ASM_SUFFIXES := .s .S
 
 # Pretty print format for programs
 PROGRAM_PP_FMT := '%-8s%s\n'
@@ -64,7 +66,7 @@ DEPENDS = $(patsubst %.o,%.d,$(filter %.o,$(TARGETS) $(OBJECTS)))
 # @param 1 List of suffixes.
 # @param 2 Path to include.
 #
-vpath-add-list = $(foreach s,$1,$(eval vpath %$s $2))
+vpath-add = $(foreach s,$1,$(eval vpath %$s $2))
 
 ##
 # Set program variable for make script and pretty printed version for rules.

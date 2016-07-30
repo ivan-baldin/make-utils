@@ -3,6 +3,10 @@ SOURCE_DIR := $(dir $(MAKEFILE_LIST))
 include $(SOURCE_DIR)mk/utils.mk
 include $(SOURCE_DIR)mk/gcc.mk
 
+# Set source directory for project sources
+SOURCE_SUFFIXES := $(C_SUFFIXES) $(CXX_SUFFIXES) $(ASM_SUFFIXES)
+$(call vpath-add,$(SOURCE_SUFFIXES),$(SOURCE_DIR))
+
 ################################################################################
 # Flags
 ################################################################################
@@ -20,8 +24,6 @@ CXXFLAGS += -MMD
 
 # Archive Flags
 ARFLAGS := rcsU
-
-$(call vpath-add-list,$(VPATH_SUFFIXES),$(SOURCE_DIR))
 
 ################################################################################
 # Rules
