@@ -28,10 +28,10 @@ $(VERBOSE).SILENT:
 # Enable second expansion of rules
 .SECONDEXPANSION:
 
-# If unset set default source directory to ".."
-ifndef SOURCE_DIR
-  SOURCE_DIR := $(dir $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST)))))
-endif
+# Set default directories
+SOURCE_DIR ?= $(dir $(firstword $(MAKEFILE_LIST)))
+OUTPUT_DIR ?= ./
+PROJECT_NAME ?= $(notdir $(realpath $(SOURCE_DIR)))
 
 ################################################################################
 # Variables
@@ -43,7 +43,7 @@ CXX_SUFFIXES := .cc .C .cpp .cxx .hpp
 ASM_SUFFIXES := .s .S
 
 # Pretty print format for programs
-PROGRAM_PP_FMT := '%-8s%s\n'
+PPRINT_FMT := '%-8s%s\n'
 
 SUBDIR_FILE ?= dir.mk
 
@@ -81,7 +81,7 @@ $(or $(MAKECMDGOALS),$(.DEFAULT_GOAL)): $1 = $$(call rule-pretty-print,$1,$2)
 endef
 
 define rule-pretty-print
-@printf $(PROGRAM_PP_FMT) '$1' '$@'
+@printf $(PPRINT_FMT) '$1' '$@'
 	$2
 endef
 
@@ -115,7 +115,7 @@ define add-subdir-body
   endif
 
   # Restore local variables
-  $(output_dir) := $2
+  output_dir := $2
   targets := $3
   objects := $4
 endef
@@ -128,5 +128,7 @@ $(call set-program,RM,rm -f)
 $(call set-program,RM-R,rm -fr)
 $(call set-program,MKDIR,mkdir -p)
 $(call set-program,MAKE,make)
+$(call set-program,WGET,wget)
+$(call set-program,UNZIP,unzip)
 
 endif
